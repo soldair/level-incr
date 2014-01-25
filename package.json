@@ -1,0 +1,19 @@
+{
+  "name": "level-incr",
+  "description": "add atomic increment/decrement to a level db",
+  "version": "0.0.1",
+  "repository": {
+    "url": "git://github.com/soldair/level-incr.git"
+  },
+  "keywords":["level","leveldb","increment","decrement","atomic"],
+  "main": "index.js",
+  "scripts": {
+    "test": "tape test/*.js"
+  },
+  "author": "Ryan Day",
+  "dependencies": {},
+  "devDependencies": {
+    "tape": "~2.3.2",
+    "level": "~0.18.0"
+  }
+}
