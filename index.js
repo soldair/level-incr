@@ -1,12 +1,12 @@
 var undef;
 
-module.exports = function(db){
+module.exports = function(db,incrStart){
   db.incr = function dbIncr(key,amount,cb){
-    handle(key,amount,cb,1,this);
+    handle(key,amount,cb,1,this,incrStart);
   };
 
   db.decr = function dbDecr(key,amount,cb){
-    handle(key,amount,cb,-1,this);
+    handle(key,amount,cb,-1,this,incrStart);
   };
   // if i return the db will people think this is a unique sublevel?
   // i much prefer monkey patching in this case.
@@ -18,7 +18,8 @@ module.exports = function(db){
 // buffer - math-buffer 
 module.exports.pending = pending = {};
 
-function handle(key,amount,cb,direction,db){
+function handle(key,amount,cb,direction,db,incrStart){
+  incrStart = incrStart||0;
   if(amount === undef) amount = 1;
   else if(typeof amount == 'function') (cb = amount) && (amount = 1);
 
@@ -42,11 +43,11 @@ function handle(key,amount,cb,direction,db){
     cbs:[cb]
   };
   
-  getCurrent(db,key);
+  getCurrent(db,key,incrStart);
 
 }
 
-function getCurrent(db,key){
+function getCurrent(db,key,incrStart){
   // lru should be on in leveldown c. is it faster to lru in js?
   db.get(key,function(err,value){
     if(err && err.type != 'NotFoundError') {
@@ -55,7 +56,7 @@ function getCurrent(db,key){
       while(o.cbs.length) o.cbs.shift()(err);
       return;
     } else if(err && err.type == 'NotFoundError') {
-      value = 0;
+      value = incrStart;
     } else {
       value = +value;
       if(isNaN(value)) value = 0;
