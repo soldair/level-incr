@@ -1,7 +1,7 @@
 {
   "name": "level-incr",
   "description": "add atomic increment/decrement to a level db",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "repository": {
     "url": "git://github.com/soldair/level-incr.git"
   },

@@ -8,8 +8,12 @@ module.exports = function(db,incrStart){
   db.decr = function dbDecr(key,amount,cb){
     handle(key,amount,cb,-1,this,incrStart);
   };
-  // if i return the db will people think this is a unique sublevel?
-  // i much prefer monkey patching in this case.
+
+  // recursive patching
+  if(db.sublevels) Object.keys(db.sublevels).forEach(function(k){
+    module.exports(db.sublevels[k]);
+  });
+
   return db;
 }
 
